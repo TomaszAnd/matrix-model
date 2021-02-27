@@ -166,12 +166,12 @@ if __name__ == "__main__":
                 mats = tf.constant(np.reshape(np.fromfile(f, dtype=np.dtype("complex64"), count=3*N*N), [3, N, N]))
             Sx, Sy, Sz = mats[0], mats[1], mats[2]
             offset = m * tf.stack([-Sz, -Sy, -Sx])
-            vectorizer = Vectorizer(algebra, tfp.bijectors.Exp())
-            offset = vectorizer.encode(tf.expand_dims(offset, 0))[0]
+            #vectorizer = Vectorizer(algebra, tfp.bijectors.Exp())
+            #offset = vectorizer.encode(tf.expand_dims(offset, 0))[0]
             # construct wavefunction
             bosonic_dim = 2 * algebra.dim
             fermionic_dim = 2 * algebra.dim
-            bosonic_wavefunc = NormalizingFlow([Normal()] * bosonic_dim, 0, tfp.bijectors.Sigmoid(), offset=offset)
+            bosonic_wavefunc = NormalizingFlow([Normal()] * bosonic_dim, 0, tfp.bijectors.Sigmoid(), offset=None)
             fermionic_wavefunc = FermionicWavefunction(algebra, bosonic_dim, 2, num_fermions, rank, fermionic_dim, num_layers)
             wavefunc = Wavefunction(algebra, vectorizer, bosonic_wavefunc, fermionic_wavefunc)
             wavefunc.offset = m * tf.stack([-Sz, -Sy, -Sx])
